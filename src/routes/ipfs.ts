@@ -170,16 +170,20 @@ async function pushCidConfig(cid: string): Promise<string> {
   const logger = getLogger('router:ipfs/pushCidConfig')
   const pow = (await getClient()) as PowClient
   // Set custom dealMinDuration and maxPrice
-  const { defaultConfig } = await pow.ffs.defaultConfig()
-  if (defaultConfig && defaultConfig.cold && defaultConfig.cold.filecoin) {
-    const { filecoin } = defaultConfig.cold
+  const { defaultStorageConfig } = await pow.ffs.defaultStorageConfig()
+  if (
+    defaultStorageConfig &&
+    defaultStorageConfig.cold &&
+    defaultStorageConfig.cold.filecoin
+  ) {
+    const { filecoin } = defaultStorageConfig.cold
     filecoin.dealMinDuration = dealMinDuration || filecoin.dealMinDuration
     filecoin.maxPrice = maxPrice || filecoin.maxPrice
-    await pow.ffs.setDefaultConfig(defaultConfig as any)
+    await pow.ffs.setDefaultStorageConfig(defaultStorageConfig as any)
   }
   logger(`Pushing ${cid} Powergate config:`)
-  logger(JSON.stringify(defaultConfig, undefined, 2))
-  const { jobId } = await pow.ffs.pushConfig(cid)
+  logger(JSON.stringify(defaultStorageConfig, undefined, 2))
+  const { jobId } = await pow.ffs.pushStorageConfig(cid)
   return jobId
 }
 

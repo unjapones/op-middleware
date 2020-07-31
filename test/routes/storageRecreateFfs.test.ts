@@ -26,12 +26,12 @@ describe('POST /storage (handle FFS instance recreation)', () => {
   const mockedClient = getMockedClient({ ffsId, ffsToken, cid, jobId })
   setClient(mockedClient)
 
-  it('on addToHot-ffs-invalidation recreate ffs instance and responds with success', async () => {
+  it('on stage-ffs-invalidation recreate ffs instance and responds with success', async () => {
     const f = { filename: 'example.txt', content: 'Example content' }
     // Simulate ffs invalidation
-    const originalAddToHot = mockedClient.ffs.addToHot
-    mockedClient.ffs.addToHot = () => {
-      mockedClient.ffs.addToHot = originalAddToHot
+    const originalStage = mockedClient.ffs.stage
+    mockedClient.ffs.stage = () => {
+      mockedClient.ffs.stage = originalStage
       throw new Error('error code 2')
     }
     const r = await request(server)

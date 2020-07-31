@@ -11,15 +11,15 @@ export function getMockedClient(options: MockedClientOptions): any {
   const mockedClient: any = {
     ffs: {
       create: () => Promise.resolve({ token: ffsToken, id: ffsId }),
-      addToHot: () => Promise.resolve({ cid }),
-      pushConfig: () => Promise.resolve({ jobId }),
+      stage: () => Promise.resolve({ cid }),
+      pushStorageConfig: () => Promise.resolve({ jobId }),
       watchJobs: (callback: (job: { status: number }) => void) => {
         // allow to update the job via a function
         mockedClient.updateJob = () => callback({ status: 5 })
         return () => null
       },
-      defaultConfig: () => Promise.resolve({}),
-      setDefaultConfig: () => Promise.resolve(),
+      defaultStorageConfig: () => Promise.resolve({}),
+      setDefaultStorageConfig: () => Promise.resolve(),
     },
     setToken: () => null,
     updateJob: null,
